@@ -1,5 +1,5 @@
 import { SubmitBtn } from './Phonebook.styled';
 
-export const SubmitButton = ({ text }) => {
-  return <SubmitBtn>{text}</SubmitBtn>;
+export const SubmitButton = () => {
+  return <SubmitBtn type="submit">Add contact</SubmitBtn>;
 };

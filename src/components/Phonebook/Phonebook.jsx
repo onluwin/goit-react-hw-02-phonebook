@@ -3,6 +3,9 @@ import { ContactForm } from './ContactForm';
 import { Filter } from './Filter';
 import { ContactList } from './ContactList';
 
+import { Wrapper } from './Phonebook.styled';
+import { Title } from './Phonebook.styled';
+
 export class Phonebook extends Component {
   state = {
     contacts: [
@@ -12,19 +15,44 @@ export class Phonebook extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
-  render() {
-    return (
-      <div>
-        <h1>Phonebook</h1>
-        <ContactForm />
 
-        <h2>Contacts</h2>
-        {/* <Filter />
-        <ContactList /> */}
-      </div>
+  onSubmit = (values, { resetForm }) => {
+    this.setState(prevState => {
+      return { contacts: [...prevState.contacts, values] };
+    });
+    resetForm();
+  };
+  onInput = e => {
+    const input = e.currentTarget.value;
+    this.setState({ filter: input });
+  };
+  onDelete = id => {
+    this.setState(prevState => {
+      return {
+        contacts: prevState.contacts.filter(contact => contact.id !== id),
+      };
+    });
+  };
+
+  render() {
+    const { contacts } = this.state;
+    let filteredContacts = this.state.contacts.filter(contact =>
+      contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
+    );
+    return (
+      <Wrapper>
+        <Title>Phonebook</Title>
+        <ContactForm onSubmit={this.onSubmit} />
+
+        {contacts.length !== 0 && (
+          <>
+            <h2 style={{ marginBottom: 10 }}>Contacts</h2>
+            <Filter onInput={this.onInput} />
+            <ContactList contacts={filteredContacts} onDelete={this.onDelete} />
+          </>
+        )}
+      </Wrapper>
     );
   }
 }
